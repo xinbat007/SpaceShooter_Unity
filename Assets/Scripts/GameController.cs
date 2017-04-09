@@ -28,14 +28,14 @@ public class GameController : MonoBehaviour {
 	void Update () {
 		if (isGameOver) {
 			if (Input.GetKeyDown (KeyCode.R)) {
-				Application.LoadLevel (Application.loadedLevel);
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Main");
 			}
 		}
 	}
 
 	IEnumerator SpawnWaves() {
 		yield return new WaitForSeconds (startWait);
-		while (true) {
+		while (!isGameOver) {
 			for (int i = 0; i < hazardCount; i++) {
 				GameObject hazard = hazards[Random.Range(0, hazards.Length)];
 				Vector3 spawnPosition = new Vector3 (
@@ -44,11 +44,6 @@ public class GameController : MonoBehaviour {
 				Quaternion spawnRotation = Quaternion.identity;
 				Instantiate (hazard, spawnPosition, spawnRotation);
 				yield return new WaitForSeconds (spawnWait);
-			}
-			if (isGameOver) {
-				restartText.text = "Press 'R' to respawn";
-				gameoverText.text = "Game Over!";
-				break;
 			}
 			yield return new WaitForSeconds (waveWait);
 		}
@@ -64,5 +59,7 @@ public class GameController : MonoBehaviour {
 	}
 	public void GameOver(){
 		isGameOver = true;
-	}
+        restartText.text = "Press 'R' to respawn";
+        gameoverText.text = "Game Over!";
+    }
 }
